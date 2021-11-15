@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- schemaLocation for autocompletion e.g. VSCode + XMLExtension -->
+<layoutDef xmlns="http://schemas.openxmlformats.org/drawingml/2006/diagram" 
+           xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" 
+           xmlns:schemaLocation=".schemas/dml-diagramDefinition.xsd">
+	<!-- Sample data -->
+    <sampData>
+        <dataModel>
+            <!-- Datanodes -->
+            <ptLst>
+                <pt modelId="0" type="doc" />
+                <!-- Using concrete input data -->
+                <!-- <pt modelId="1" type="node"> <t> <a:bodyPr /> <a:p> <a:r> <a:t>1</a:t> </a:r> </a:p> </t> </pt> -->
+                <!-- <pt modelId="11" type="node"> <t> <a:bodyPr /> <a:p> <a:r> <a:t>Test 1</a:t> </a:r> </a:p> </t> </pt> -->
+                <!-- <pt modelId="2" type="node"> <t> <a:bodyPr /> <a:p> <a:r> <a:t>2</a:t> </a:r> </a:p> </t> </pt> -->
+                <!-- <pt modelId="21" type="node"> <t> <a:bodyPr /> <a:p> <a:r> <a:t>Test 2</a:t> </a:r> </a:p> </t> </pt> -->
+                <!-- <pt modelId="3" type="node"> <t> <a:bodyPr /> <a:p> <a:r> <a:t>3</a:t> </a:r> </a:p> </t> </pt> -->
+                <!-- <pt modelId="31" type="node"> <t> <a:bodyPr /> <a:p> <a:r> <a:t>Test 3</a:t> </a:r> </a:p> </t> </pt> -->
+                <!-- Using placeholders -->
+                <pt modelId="1" type="node"> <prSet phldr="1" /> </pt>
+                <pt modelId="11" type="node"> <prSet phldr="1" /> </pt>
+                <pt modelId="2" type="node"> <prSet phldr="1" /> </pt>
+                <pt modelId="21" type="node"> <prSet phldr="1" /> </pt>
+                <pt modelId="3" type="node"> <prSet phldr="1" /> </pt>
+                <pt modelId="31" type="node"> <prSet phldr="1" /> </pt>
+            </ptLst>
+            <!-- Relations between datanodes -->
+            <cxnLst>
+                <cxn modelId="4" type="parOf" srcId="0" destId="1" srcOrd="0" destOrd="0" presId="" />
+                <cxn modelId="5" type="parOf" srcId="0" destId="2" srcOrd="1" destOrd="0" presId="" />
+                <cxn modelId="6" type="parOf" srcId="0" destId="3" srcOrd="3" destOrd="0" presId="" />
+                <cxn modelId="12" type="parOf" srcId="1" destId="11" srcOrd="0" destOrd="0" presId="" />
+                <cxn modelId="23" type="parOf" srcId="2" destId="21" srcOrd="0" destOrd="0" presId="" />
+                <cxn modelId="34" type="parOf" srcId="3" destId="31" srcOrd="0" destOrd="0" presId="" />
+            </cxnLst>
+        </dataModel>
+    </sampData>
+
+    <!-- List of Nodes -->
+	<!-- lin of composite of desTx and labelTx -->
+	<layoutNode>
+		<!-- List of variable definitions -->
+		<varLst>
+			<dir val="norm" />
+			<animLvl val="lvl" />
+			<resizeHandles val="rel" />
+		</varLst>
+		<!-- Base algorithm to use, for parameters see coresponding schema -->
+		<alg type="lin">
+			<param type="linDir" val="fromT" />
+			<param type="nodeHorzAlign" val="l" />
+		</alg>
+		<shape />
+		<presOf />
+		<!-- Layout constraints -->
+		<constrLst>
+			<constr type="w" for="ch" forName="composite" refType="w" />
+			<!-- Set constraints on text nodes -->
+			<constr op="equ" for="des" forName="desTx" type="primFontSz" val="36" />
+			<constr op="equ" for="des" forName="labelTx" type="primFontSz" val="22" />
+            <!--Space between rows/columns-->
+            <constr op="equ" type="sp" refType="w" refFor="ch" refForName="composite" fact="0.1" /> 
+			<constr type="h" for="des" forName="labelTx" refType="primFontSz" refFor="des" refForName="desTx" fact="0.6" />
+			<!-- Tell nested composites how big label is -->			
+			<constr type="userA" for="des" forName="composite" refType="primFontSz" refFor="des" refForName="desTx" fact="0.5" />
+			<constr type="h" for="ch" forName="sp" refType="primFontSz" refFor="des" refForName="desTx" fact="0.1" />
+		</constrLst>
+		<ruleLst>
+			<rule type="primFontSz" for="des" forName="desTx" val="5" />
+		</ruleLst>
+
+		<forEach axis="ch" ptType="node">
+			<!-- composite of desTx and labelTx -->
+			<layoutNode name="composite">
+				<alg type="composite" />
+				<shape />
+				<presOf />
+				<choose>
+					<if func="var" arg="dir" op="equ" val="norm">
+						<constrLst>
+							<!-- userA is the size of the labelTx -->
+							<constr type="userA" />
+							<!-- desTx -->
+							<constr type="l" for="ch" forName="desTx" refType="userA" fact="1.1" />
+							<constr type="r" for="ch" forName="desTx" refType="w" />
+							<constr type="t" for="ch" forName="desTx" val="0" />
+							<constr type="h" for="ch" forName="desTx" refType="userA" fact="1" />
+							<!-- labelTx -->
+							<constr type="w" for="ch" forName="labelTx" refType="userA" />
+							<constr type="h" for="ch" forName="labelTx" refType="userA" />
+							<constr type="l" for="ch" forName="labelTx" val="0" />
+							<constr type="ctrY" for="ch" forName="labelTx" refType="h" refFor="ch" refForName="desTx" fact="0.5" />
+						</constrLst>
+					</if>
+					<else>
+						<constrLst>
+							<!-- userA is the size of the labelTx -->
+							<constr type="userA" />
+							<!-- desTx -->
+							<constr type="w" for="ch" forName="desTx" refType="w" />
+							<constr type="wOff" for="ch" forName="desTx" refType="userA" fact="-1.2" />
+							<constr type="h" for="ch" forName="desTx" refType="userA" fact="1.19" />
+							<constr type="l" for="ch" forName="desTx" val="0" />
+							<constr type="t" for="ch" forName="desTx" val="0" />
+							<!-- labelTx -->
+							<constr type="w" for="ch" forName="labelTx" refType="userA" />
+							<constr type="h" for="ch" forName="labelTx" refType="userA" />
+							<constr type="r" for="ch" forName="labelTx" refType="w" />
+							<constr type="ctrY" for="ch" forName="labelTx" refType="h" refFor="ch" refForName="desTx" fact="0.5" />
+						</constrLst>
+					</else>
+				</choose>
+				
+				<!-- desTx - Description -->
+				<layoutNode name="desTx" styleLbl="revTx">
+					<varLst>
+						<bulletEnabled val="true" />
+					</varLst>
+					<alg type="tx">
+						<param type="parTxLTRAlign" val="l" />
+						<param type="parTxRTLAlign" val="r" />
+					</alg>
+                    <shape type="rect" lkTxEntry="true">
+                        <t>
+                            <a:bodyPr />
+                            <a:p>
+                                <a:r>
+                                    <a:t>1</a:t>
+                                </a:r>
+                            </a:p>
+                        </t>
+                    </shape>
+					<presOf axis="des" ptType="node" />
+					<constrLst>
+						<constr type="tMarg" refType="primFontSz" fact="0.1" />
+						<constr type="bMarg" refType="primFontSz" fact="0.1" />
+						<constr type="lMarg" refType="primFontSz" fact="0.3" />
+						<constr type="rMarg" refType="primFontSz" fact="0.3" />
+					</constrLst>
+					<ruleLst>
+						<rule type="h" val="INF" />
+					</ruleLst>
+				</layoutNode>
+
+				<!-- labelTx - Leading Label/Number -->
+				<layoutNode name="labelTx" styleLbl="node1">
+					<varLst>
+						<chMax val="0" />
+						<chPref val="0" />
+						<bulletEnabled val="true" />
+					</varLst>
+					<alg type="tx" />
+					<shape type="rect" lkTxEntry="true"/>
+					<presOf axis="self" />
+					<constrLst>
+						<constr type="tMarg" refType="primFontSz" fact="0.3" />
+						<constr type="bMarg" refType="primFontSz" fact="0.3" />
+						<constr type="lMarg" refType="primFontSz" fact="0.3" />
+						<constr type="rMarg" refType="primFontSz" fact="0.3" />
+					</constrLst>
+					<ruleLst>
+						<rule type="primFontSz" val="1" />
+					</ruleLst>
+				</layoutNode>
+			</layoutNode>
+
+            <forEach axis="followSib" ptType="sibTrans" cnt="1">
+                <layoutNode name="sibTrans">
+                    <alg type="sp" />
+                    <shape />
+                    <presOf />
+                    <constrLst />
+                    <ruleLst />
+                </layoutNode>
+            </forEach>
+        </forEach>
+    </layoutNode>
+</layoutDef>
